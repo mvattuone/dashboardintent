@@ -1,0 +1,8 @@
+.DS_Store
+node_modules
+static
+venv
+*.pyc
+*.db
+*.sqlite3
+*.csv
