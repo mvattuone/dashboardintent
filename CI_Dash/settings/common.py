@@ -23,8 +23,7 @@ BASE_DIR = os.path.join(APP_DIR, '..')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '*=%5%k-5t3ua)c7c&7td#_en$-r22rruy8%uk0xb4wpg=0$++-'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -114,7 +113,3 @@ NPM_FILE_PATTERNS = {
     'd3': ['d3.js'],
     'nvd3': ['nv.d3.js'],
 }
-
-# Parse database configuration from $DATABASE_URL
-DATABASES = {'default': dj_database_url.config(
-             default=os.environ['DATABASE_URL'])}
