@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/
 
 import os
 
+from whitenoise.django import DjangoWhiteNoise
+
 from django.core.wsgi import get_wsgi_application
 
 # DJANGO_SETTINGS_MODULE is being stored in the environment
