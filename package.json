@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "backbone": "^1.2.3",
+    "basscss": "^7.0.4",
     "d3": "^3.5.9",
     "jquery": "^2.1.4",
     "nvd3": "^1.8.1",
