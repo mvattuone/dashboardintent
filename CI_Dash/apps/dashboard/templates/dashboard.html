@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="container" id="dashboard">
+    <div class="sm-col sm-col-3">
+        <section id="views">
+            <h2>Views</h2>
+            <select id="metrics">
+            {% for metric in metrics %}
+                <option value='{{metric.name}}'>{{metric.name}}</option>
+            {% endfor %}
+            </select>
+        </section>
+        <section id="pages">
+            <h2>Pages</h2>
+            <div></div>
+        </section>
+    </div>
+    <div class="sm-col sm-col-9">
+        <section id="charts" class="sm-col-12">
+            <h2>Charts</h2>
+            <div></div>
+        </section>
+        <section class="sm-col sm-col-4" id="trends">
+            <h2>Trends</h2>
+        </section>
+        <section class="sm-col sm-col-8" id="recommendations">
+            <h2>Recommendations</h2>
+        </section>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{
+  "name": "ci_dash",
+  "version": "0.0.1",
+  "description": "A dashboard for Content Intent.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "dashboard",
+    "d3",
+    "django"
+  ],
+  "author": "Mike Vattuone",
+  "license": "ISC",
+  "dependencies": {
+    "backbone": "^1.2.3",
+    "d3": "^3.5.9",
+    "jquery": "^2.1.4",
+    "nvd3": "^1.8.1",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "browserify": "^11.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.4.2",
+    "gulp-util": "^3.0.7",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
