@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CI_dash.settings")
+# DJANGO_SETTINGS_MODULE is being stored in the environment
 
 application = get_wsgi_application()
