@@ -14,3 +14,4 @@ from django.core.wsgi import get_wsgi_application
 # DJANGO_SETTINGS_MODULE is being stored in the environment
 
 application = get_wsgi_application()
+application = DjangoWhiteNoise(application)
