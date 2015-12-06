@@ -1,6 +1,6 @@
 from common import *
 
-DEBUG = False
+DEBUG = os.environ.get('DEBUG')
 ALLOWED_HOSTS = ['dashboardintent.herokuapp.com']
 
 # Parse database configuration from $DATABASE_URL
