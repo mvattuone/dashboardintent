@@ -12,10 +12,20 @@
 
     <!-- Place favicon.ico in the root directory -->
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
+    <header class="clearfix">
+        <div class="container">
+            <div id="logo">
+                <a href="http://contentintent.com/">
+                    <img class="logo-main logo-reg" src="http://contentintent.com/wp-content/uploads/2015/03/logo_long_small.png" height="40" width="127" alt="ContentIntent">                      
+                </a>
+            </div>
+        </div>
+    </header>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
             <![endif]-->
+
       {% block content %}{% endblock %}
       <script src="{% static 'js/bundle.js' %}"></script>
 

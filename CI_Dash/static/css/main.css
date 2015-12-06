@@ -1,12 +1,58 @@
-body {
-    background: #222;
-    color:#FFF;
-    font-size:15px;
+img { max-width:100%; }
+body { background-color: #fbfcfd; }
+
+header {
+    min-height:50px;
+    width: 100%;
+    z-index: 9998;
+    background-color: white;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -o-box-shadow: none;
+    border-bottom: 1px solid rgba(255,255,255,0.25) !important;
 }
 
+#logo {
+    float: left;
+    display: block;
+    margin: 16px 0;
+}
 
-#dashboard.container > div {
-    background: #4e606e;    
+#logo img {
+  height:30px;
+  width:auto;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    color: #515151;
+    -webkit-font-smoothing: antialiased;
+}
+
+p, ul, label, select {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    color: #515151;
+    -webkit-font-smoothing: antialiased;
+}
+
+.card {
+    padding:1.5rem;
+    box-shadow:0 1px 2px #aaa;
+    background:white;
+    border-radius:3px;
+    user-select:none;
+    animation:fly-in-from-left .5s 1s ease both;
+    transform-origin:top left;
+}
+
+.controls-dropdown {
+    padding: 1.9rem;
+    height: 50px;
+    background: #FFF;
+    border: 1px solid #e2e2e2;
 }
 
 /********************

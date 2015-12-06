@@ -20,6 +20,7 @@
     "gulp": "^3.9.0",
     "jquery": "^2.1.4",
     "nvd3": "^1.8.1",
+    "randomcolor": "^0.4.2",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

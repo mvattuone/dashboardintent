@@ -18,15 +18,30 @@ gulp.task('javascript', function () {
   })
 
   return b.bundle()
-    .on('error', gutil.log)
+    .on('error', function() {
+      gutil.log();
+      this.emit('end');
+    })
     .pipe(source('CI_Dash/static/js/bundle.js'))
-    .on('error', gutil.log)
+    .on('error', function() {
+      gutil.log();
+      this.emit('end');
+    })
     .pipe(buffer())
-    .on('error', gutil.log)
+    .on('error', function() {
+      gutil.log();
+      this.emit('end');
+    })
     .pipe(sourcemaps.init({loadMaps: true}))
-    .on('error', gutil.log)
+    .on('error', function() {
+      gutil.log();
+      this.emit('end');
+    })
     .pipe(sourcemaps.write('./'))
-    .on('error', gutil.log)
+    .on('error', function() {
+      gutil.log();
+      this.emit('end');
+    })
     .pipe(gulp.dest('.'));
 });
 

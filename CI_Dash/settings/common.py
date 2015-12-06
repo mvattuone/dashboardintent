@@ -17,6 +17,7 @@ import dj_database_url
 APP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.join(APP_DIR, '..')
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -36,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'npm',
     'whitenoise',
+    'nested_inline',
     'CI_Dash.apps.dashboard',
 )
 
@@ -114,3 +116,5 @@ NPM_FILE_PATTERNS = {
     'd3': ['d3.js'],
     'nvd3': ['nv.d3.js'],
 }
+
+AUTH_PROFILE_MODULE = 'CI_Dash.Client'

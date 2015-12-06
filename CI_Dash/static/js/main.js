@@ -1,90 +1,180 @@
 $ = require('jquery');
 d3 = require('d3');
 nvd3 = require('nvd3');
+randomColor = require('randomcolor');
 
 window.app = {}
 
 app.initialize = function() { 
 
-    function buildTrend() {
-        // TBD
+    function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = $.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
     }
 
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    function sameOrigin(url) {
+        // test that a given url is a same-origin URL
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+
+    function loadTrends() {
+
+        window.data = $('#trends').data('trends');
+
+        nvd3.addGraph(function(){
+
+            var data = $('#trends').data('trends'),
+                chartContainer = $('<div />')[0],
+                svg = $('<svg style="height:200px;width:100%;" />')[0],
+                chart = nvd3.models.pieChart();
+
+            $(chartContainer).append(svg);
+
+            $('#trends').append(chartContainer);
+
+            chart.x(function(d) { return d.label })
+                 .y(function(d) { return d.value })
+                 .labelType("percent")
+                 .donut(true)
+
+
+            d3.select(svg).datum(data).call(chart);
+            nv.utils.windowResize(
+                function() {
+                    chart.update();
+                }
+            );
+        });
+
+    }
 
     function buildChart(data) {
         // for each group in currentGroups
         // take the metrics associated with it
         // and build a chart, then append to DOM
 
+
+
          nvd3.addGraph(function(){
-            var chart = nvd3.models.lineChart();
-            var svg = $('<svg style="height:250px" />')[0];
+            var chart = nvd3.models.stackedAreaChart(),
+                chartContainer = $('<div class="chart col col-6" />')[0],
+                svg = $('<svg style="height:100%;width:100%;" />')[0];
 
-            $("#charts > div").append(svg);
+            $(chartContainer).append(svg);
 
+            $('#charts').append(chartContainer);
+            chart.showControls(false).useInteractiveGuideline(false);
             d3.select(svg).datum(data).call(chart);
-            chart.pointSize(0);
+            
             nv.utils.windowResize(
                 function() {
                     chart.update();
                 }
             );
             
+            
         });
 
     }
 
-    function buildGroups() {
-        app.currentGroups.forEach(function(group) {
-            var template = "<li class='panel bg-navy'>" + group.name + "</li>";
+    function updateDashboard(data) {
+        colors = randomColor({
+            count: data.length
+        });
+
+        data.forEach(function(d) {
+            var group = d.shift(),
+                metrics = [];
+
+                d.forEach(function(metric, i) {
+                    metrics.push({ 'x': i, 'y': metric });
+                });
+
+            var template = "<div class='controls-group'><label>" + group + "</label></div>";
             var data = [{
-                'key': group.name,
-                'values': group.metrics,
-                'color': '#222'
+                'key': group,
+                'values': metrics,
+                'color': colors.shift()
             }]
 
-            $('#pages > div').append(template);
+            $('#groups').append(template);
             buildChart(data);
-            
         })
-        // for each group in currentGroups
-        // take the group that was built
-        // and populate a template that 
-        // we then append to the DOM
-        // probably too simple to warrant 
-        // a real template, just
-        // append html $('foo').html()
+
     }
 
     function toggleView() {
         var data = {
-            'metric': $('#metrics').val()
+            'metricName': $('#metric').val()
         }
 
         $.ajax({
             method: 'POST',
-            url: 'retrieve/',
+            url: '/get-groups/',
             data: data,
             dataType: 'json',
-            success: function(data, jqXhr) {
-                app.currentGroups = data;
-            },
-            error: function(error) {
-                // does this even work
-                throw new Error(error);
-            }
-        }).then(function() {
-            buildGroups();
+        }).then(function(data) {
+            updateDashboard(data);
+        }).fail(function(error) {
+            throw new Error(error.responseText);
         });
     }
 
-    $('#metrics').on('change', function() {
-        $('#pages > div').empty();
-        $('#charts > div').empty();
+    function clearDashboard() {
+        $('.chart').remove();
+        $('.controls-group').remove();
+        return this;
+    }
+
+    $('#metric').on('change', function(e) {
+        e.preventDefault();
+        clearDashboard();
         toggleView();
     });
 
-    toggleView();
+    var csrftoken = getCookie('csrftoken');
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                // Send the token to same-origin, relative URLs only.
+                // Send the token only if the method warrants CSRF protection
+                // Using the CSRFToken value acquired earlier
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
+    $(document).ready(function() {
+
+        loadTrends();
+        toggleView();
+
+    });
 }
 
 $(function() {

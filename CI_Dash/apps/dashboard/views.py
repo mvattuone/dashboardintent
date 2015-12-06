@@ -1,51 +1,66 @@
-from django.http import HttpResponse
+import json
+
 from django.conf import settings
+from django.core import serializers
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
-from .models import Metric, Group
+
+from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
 
-import json
+from models import Metric, MetricKey, Group, Dashboard
+
 
 # Log in a user and allow them to access dashboard, which contains JS
 # that allows for interactivity with different datasets.
 
 
-@login_required(login_url='/accounts/login/')
 def index(request):
+    return HttpResponseRedirect('/accounts/login/')
+
+
+# If the user successfully authenticates
+@user_passes_test(lambda u: u.is_superuser or u.is_authenticated())
+def dashboard(request, slug):
+    if request.user.is_superuser:
+        dashboard = Dashboard.objects.get(slug=slug)
+    else:
+        dashboard = Dashboard.objects.get(user=request.user.id)
 
     context = {
-        'metrics': Metric.objects.all().values('name').distinct()
+        'recommendations': dashboard.recommendations,
+        'trends': json.dumps([
+            {
+                "label": "Positive",
+                "value": dashboard.trendPositive
+            },
+            {
+                "label": "Negative",
+                "value": dashboard.trendNegative
+            }
+        ]),
+        'metric_keys': MetricKey.objects.all()
     }
-    print context
+
+
     return render_to_response('dashboard.html', context,
                               context_instance=RequestContext(request))
 
-# Takes a requested metric passed in via POST and retrieves all associated grou
-# ps containing the metric, along with JSON serializable metric values for each
-# group returned.
 
+# returns HTTPResponse with queryset storing all groups containing requested
+# metric
+def get_groups(request):
+    dashboard = Dashboard.objects.get(user=request.user.id)
+    metric = request.POST['metricName']
 
-@csrf_exempt
-def retrieve(request):
-    qs = Group.objects.filter(client=request.user.id)
-    requested_metric = request.POST['metric']
-    data = []
-    for q in qs:
-        try:
-            metric = Metric.objects.get(group=q.id,
-                                        name=requested_metric)
-            group = model_to_dict(q)
-            group['metrics'] = [
-                {'x': 1, 'y': metric.lowest},
-                {'x': 2, 'y': metric.lower},
-                {'x': 3, 'y': metric.average},
-                {'x': 4, 'y': metric.higher},
-                {'x': 5, 'y': metric.highest}
-            ]
-            data.append(group)
-        except Metric.DoesNotExist:
-            pass
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    groups = dashboard.group_set.filter(metric__key__name=metric).values_list(
+                                        'name',
+                                        'metric__lowest',
+                                        'metric__lower',
+                                        'metric__neutral',
+                                        'metric__higher',
+                                        'metric__highest')
+    data = json.dumps(list(groups))
+    return HttpResponse(data, content_type="application/json")

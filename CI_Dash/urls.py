@@ -22,8 +22,10 @@ from apps.dashboard.views import *
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'CI_Dash.apps.dashboard.views.index', name='index'),
-    url(r'^retrieve/$', 'CI_Dash.apps.dashboard.views.retrieve',
+    url(r'^get-groups/$', 'CI_Dash.apps.dashboard.views.get_groups',
         name='retrieve'),
+    url(r'^dashboard/(?P<slug>.*)$', 'CI_Dash.apps.dashboard.views.dashboard',
+        name='dashboard'),
     url(r'^accounts/login/$',
         auth_views.login, {'template_name': 'login.html'}),
 ]

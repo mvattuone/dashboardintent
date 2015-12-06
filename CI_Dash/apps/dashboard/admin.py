@@ -1,19 +1,29 @@
 from django.contrib import admin
-from models import Group, Metric
+from nested_inline.admin import NestedStackedInline, NestedModelAdmin
+from models import Group, Metric, MetricKey, Dashboard
 
 
-class MetricInline(admin.TabularInline):
+class MetricInline(NestedStackedInline):
     model = Metric
-    fields = ('name',
-              'lowest',
-              'lower',
-              'average',
-              'higher',
-              'highest')
+    fk_name = 'group'
 
 
-class GroupAdmin(admin.ModelAdmin):
-
+class GroupInline(NestedStackedInline):
+    model = Group
+    extra = 1
+    fk_name = 'dashboard'
     inlines = [MetricInline]
 
-admin.site.register(Group, GroupAdmin)
+
+class GroupAdmin(NestedModelAdmin):
+    model = Group
+    inlines = [MetricInline]
+
+
+class DashboardAdmin(NestedModelAdmin):
+    model = Dashboard
+    inlines = [GroupInline]
+    prepopulated_fields = {"slug": ("client_name",)}
+
+admin.site.register(MetricKey)
+admin.site.register(Dashboard, DashboardAdmin)

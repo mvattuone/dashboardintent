@@ -1,33 +1,40 @@
 {% extends "base.html" %}
 
+{% block body_class %}{{dashboard.slug}}{% endblock %}
 
 {% block content %}
-<div class="container" id="dashboard">
-    <div class="sm-col sm-col-3">
-        <section id="views">
-            <h2>Views</h2>
-            <select id="metrics">
-            {% for metric in metrics %}
-                <option value='{{metric.name}}'>{{metric.name}}</option>
-            {% endfor %}
-            </select>
-        </section>
-        <section id="pages">
-            <h2>Pages</h2>
-            <div></div>
-        </section>
+
+<div class="container py4 clearfix flex">
+
+<aside class="secondary col col-4">
+<nav class="controls">
+    <select id="metric" class="controls-dropdown">
+    {% for metric_key in metric_keys %}
+        <option value='{{metric_key.name}}'>{{metric_key.name}}</option>
+    {% endfor %}
+    </select>
+    <div id="groups">
+        <h3>Groups</h3>
     </div>
-    <div class="sm-col sm-col-9">
-        <section id="charts" class="sm-col-12">
-            <h2>Charts</h2>
-            <div></div>
-        </section>
-        <section class="sm-col sm-col-4" id="trends">
-            <h2>Trends</h2>
-        </section>
-        <section class="sm-col sm-col-8" id="recommendations">
-            <h2>Recommendations</h2>
-        </section>
-    </div>
+</nav>
+</aside>
+
+<div class="primary card col col-8">
+<section class="col col-12 flex-wrap" id="charts">
+    <h2>Charts</h2>
+</section>
+
+<section class="col-4 col" id="trends" data-trends='{{trends}}'>
+    <h2>Trends</h2>
+</section>
+
+<section class="col-8 col" id="recommendations">
+    <h2>Recommendations</h2>
+    {{recommendations|safe}}
+</section>
 </div>
+
+
+
+
 {% endblock %}
