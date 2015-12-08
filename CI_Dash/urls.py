@@ -26,7 +26,7 @@ urlpatterns = [
         name='retrieve'),
     url(r'^dashboard/(?P<slug>.*)$', 'CI_Dash.apps.dashboard.views.dashboard',
         name='dashboard'),
-    url(r'^accounts/login/$',
+    url(r'^login/$',
         auth_views.login, {'template_name': 'login.html'}),
 ]
 

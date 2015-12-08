@@ -2,7 +2,7 @@ import json
 
 from django.conf import settings
 from django.core import serializers
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
@@ -18,16 +18,28 @@ from models import Metric, MetricKey, Group, Dashboard
 
 
 def index(request):
-    return HttpResponseRedirect('/accounts/login/')
+    if request.user.is_authenticated:
+        dashboard = Dashboard.objects.get(user=request.user)
+        return HttpResponseRedirect('/dashboard/%s' % dashboard.slug)
+    else:
+        return HttpResponseRedirect('/accounts/login/')
 
 
 # If the user successfully authenticates
 @user_passes_test(lambda u: u.is_superuser or u.is_authenticated())
 def dashboard(request, slug):
+    
+
     if request.user.is_superuser:
-        dashboard = Dashboard.objects.get(slug=slug)
+        try:
+            dashboard = Dashboard.objects.get(slug=slug)
+        except Dashboard.DoesNotExist:
+            raise Http404("Dashboard does not exist.")
     else:
-        dashboard = Dashboard.objects.get(user=request.user.id)
+        try:
+            dashboard = Dashboard.objects.get(user=request.user)
+        except Dashboard.DoesNotExist:
+            raise Http404("Dashboard does not exist.")
 
     context = {
         'recommendations': dashboard.recommendations,
@@ -43,7 +55,6 @@ def dashboard(request, slug):
         ]),
         'metric_keys': MetricKey.objects.all()
     }
-
 
     return render_to_response('dashboard.html', context,
                               context_instance=RequestContext(request))

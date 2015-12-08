@@ -41,6 +41,8 @@ INSTALLED_APPS = (
     'CI_Dash.apps.dashboard',
 )
 
+LOGIN_REDIRECT_URL = '/'
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
