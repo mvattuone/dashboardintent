@@ -4,9 +4,11 @@
 
 {% block content %}
 
-<div class="container py4 clearfix flex">
+<div class="container py2 clearfix">
 
-<aside class="secondary col col-4">
+<h1>Hello, {{client_name}}!</h1>
+
+<aside class="secondary col col-2 px2 py2">
 <nav class="controls">
     <select id="metric" class="controls-dropdown">
     {% for metric_key in metric_keys %}
@@ -19,21 +21,25 @@
 </nav>
 </aside>
 
-<div class="primary card col col-8">
-<section class="col col-12 flex-wrap" id="charts">
-    <h2>Charts</h2>
-</section>
-
-<section class="col-4 col" id="trends" data-trends='{{trends}}'>
-    <h2>Trends</h2>
-</section>
-
-<section class="col-8 col" id="recommendations">
-    <h2>Recommendations</h2>
-    {{recommendations|safe}}
-</section>
+<div class="primary col col-10 px2 py2">
+    <div class="col col-12 px2">
+        <section class="card clearfix" id="charts">
+            <h2 class="m0">Charts</h2>
+        </section>
+    </div>
+    <div class="col col-4 px2">
+        <section class="card clearfix" id="trends" data-trends='{{trends}}'>
+            <h2 class="m0">Trends</h2>
+        </section>
+    </div>
+    <div class="col col-8 px2">
+        <section class="card clearfix" id="recommendations">
+            <h2 class="m0">Recommendations</h2>
+            {{recommendations|safe}}
+        </section>
+    </div>
 </div>
-
+</div>
 
 
 

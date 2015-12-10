@@ -1,3 +1,7 @@
+* { 
+  box-sizing:border-box;
+}
+
 img { max-width:100%; }
 body { background-color: #fbfcfd; }
 
@@ -43,9 +47,17 @@ p, ul, label, select {
     box-shadow:0 1px 2px #aaa;
     background:white;
     border-radius:3px;
-    user-select:none;
-    animation:fly-in-from-left .5s 1s ease both;
-    transform-origin:top left;
+    overflow:auto;
+    margin:1rem 0.25rem;
+}
+
+.card:first-child { 
+  margin-top:0;
+  margin-left:0;
+}
+
+.card:last-child {
+  margin-right:0;
 }
 
 .controls-dropdown {

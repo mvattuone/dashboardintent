@@ -42,6 +42,7 @@ def dashboard(request, slug):
             raise Http404("Dashboard does not exist.")
 
     context = {
+        'client_name': dashboard.client_name,
         'recommendations': dashboard.recommendations,
         'trends': json.dumps([
             {
