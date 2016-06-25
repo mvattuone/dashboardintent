@@ -45,6 +45,6 @@ gulp.task('javascript', function () {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('watch', function() { 
+gulp.task('watch', function() {
   gulp.watch(['CI_Dash/static/js/*'], ['javascript']);
 });

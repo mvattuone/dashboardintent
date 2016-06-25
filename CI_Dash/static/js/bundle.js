@@ -6,7 +6,7 @@ randomColor = require('randomcolor');
 
 window.app = {}
 
-app.initialize = function() { 
+app.initialize = function() {
 
     function getCookie(name) {
     var cookieValue = null;
@@ -81,23 +81,22 @@ app.initialize = function() {
 
 
          nvd3.addGraph(function(){
-            var chart = nvd3.models.stackedAreaChart(),
-                chartContainer = $('<div class="chart col col-6" />')[0],
+            var chart = nvd3.models.multiBarChart(),
+                chartContainer = $('<div class="chart col col-12" />')[0],
                 svg = $('<svg style="height:100%;width:100%;" />')[0];
 
             $(chartContainer).append(svg);
 
             $('#charts').append(chartContainer);
-            chart.showControls(false).useInteractiveGuideline(false);
             d3.select(svg).datum(data).call(chart);
-            
+
             nv.utils.windowResize(
                 function() {
                     chart.update();
                 }
             );
-            
-            
+
+
         });
 
     }
@@ -106,6 +105,8 @@ app.initialize = function() {
         colors = randomColor({
             count: data.length
         });
+
+        var newData = [];
 
         data.forEach(function(d) {
             var group = d.shift(),
@@ -116,16 +117,21 @@ app.initialize = function() {
                 });
 
             var template = "<div class='controls-group'><label>" + group + "</label></div>";
-            var data = [{
+            var dataSet = {
                 'key': group,
                 'values': metrics,
                 'color': colors.shift()
-            }]
+            };
 
-            $('#groups').append(template);
-            buildChart(data);
-        })
+            console.log(newData);
 
+            newData.push(dataSet);
+        });
+
+        console.log(newData);
+
+        var template = buildChart(newData);
+        $('#groups').append(template);
     }
 
     function toggleView() {
@@ -187,7 +193,6 @@ $(function() {
 
 
 });
-
 
 },{"d3":2,"jquery":3,"nvd3":4,"randomcolor":5}],2:[function(require,module,exports){
 !function() {
