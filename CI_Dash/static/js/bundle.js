@@ -113,7 +113,29 @@ app.initialize = function() {
                 metrics = [];
 
                 d.forEach(function(metric, i) {
-                    metrics.push({ 'x': i, 'y': metric });
+                    var label;
+                    switch (i) {
+                        case 0:
+                            label = "Lowest"
+                            break;
+                        case 1:
+                            label = "Lower"
+                            break;
+                        case 2:
+                            label = "Neutral"
+                            break;
+                        case 3:
+                            label = "Higher"
+                            break;
+                        case 4:
+                            label = "Highest"
+                            break;
+                        default:
+                            label = "Not gonna happen"
+                            break;
+                    }
+
+                    metrics.push({ 'x': label, 'y': metric });
                 });
 
             var template = "<div class='controls-group'><label>" + group + "</label></div>";
@@ -126,12 +148,10 @@ app.initialize = function() {
             console.log(newData);
 
             newData.push(dataSet);
+            $('#groups').append(template);
         });
 
-        console.log(newData);
-
-        var template = buildChart(newData);
-        $('#groups').append(template);
+        buildChart(newData);
     }
 
     function toggleView() {

@@ -28,7 +28,7 @@ def index(request):
 # If the user successfully authenticates
 @user_passes_test(lambda u: u.is_superuser or u.is_authenticated())
 def dashboard(request, slug):
-    
+
 
     if request.user.is_superuser:
         try:
